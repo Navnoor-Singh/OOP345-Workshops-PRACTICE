@@ -2,7 +2,7 @@
 
 In this workshop, you store polymorphic objects in an STL container.
 
-You are going to create an application that simulates an autoshop that sells various types of vehicles.  This specific application, will focus on **cars** and **racecars**.
+You are going to create an application that simulates an autoshop that sells various types of vehicles.  This specific application, will focus on **cars**, **racecars**, **vans**, and **luxury vans**.
 
 
 
@@ -137,7 +137,7 @@ Design and code a class named `Van`, that inherits the interface `Vehicle` (supp
   ```
   TAG,MAKER,TYPE,PURPOSE,CONDITION,TOP_SPEED
   ```
-  - `TAG`, is a single character representing the type of vehicle: `v` or `V` for van. Any other tag is considered invalid.
+  - `TAG`, is a single character representing the type of vehicle: `v` or `V` for van.
   - `MAKER`, the name of the company that makes the car
   - `TYPE`, a single character: `p` for **pickup**, `m` for **minibus**, and `c` for **camper**. Any other character is considered invalid.
   - `PURPOSE`, a single character, `d` for **delivery**, `p` for **passenger**, `c` for **camping**. Any other characer is considered invalid.
@@ -289,7 +289,7 @@ This class should not have access to the attributes of the parent class.
 ### `Luxuryvan` Module
 
 
-Add a `Luxuryvan` module to your project. A `Luxuryvan` is a `Van` that identifies the electric vans as well as being luxurious (this class should inherit `Van`).
+Add a `Luxuryvan` module to your project. A `Luxuryvan` is a `Van` that identifies a van that is considered luxourious and is also electric (this class should inherit `Van`).
 
 ***Private Data***
 
@@ -298,11 +298,15 @@ Add a `Luxuryvan` module to your project. A `Luxuryvan` is a `Van` that identifi
 
 ***Public Members***
 
-- `Luxuryvan(std::istream& in)`: calls the constructor from `Van` to build the subobject, and then it extracts the last field from the stream containing the consumption type for the van. The input format for a luxuryvan is `TAG,MAKER,TYPE,PURPOSE,CONDITION,TOP_SPEED,CONSUMPTION`
-- `void display(std::ostream& out) const`: calls `Van::display()` to print the information about the car, and adds `electronic van  *` at the end and igrnores the `gas consumed van`. The format should be `MAKER | TYPE | USAGE | CONDITION | TOP_SPEED | electronic van  *`
+- `Luxuryvan(std::istream& in)`: calls the constructor from `Van` to build the subobject, and then it extracts the last field from the stream containing the consumption type for the van. The input format for a luxuryvan is `TAG,MAKER,TYPE,PURPOSE,CONDITION,TOP_SPEED,CONSUMPTION`, where
+  - `CONSUMPTION` is a single character representing the type of fuel needed by the vehicle: `g` for gas and `e` for electric. Only `e` is valid for luxury vans (if `g` is found, an exception should be thrown).
+  - the other fields have the same semantic as for `Van` class.
+- `void display(std::ostream& out) const`: calls `Van::display()` to print the information about the car, and adds `electronic van  *` at the end and igrnores the `gas consumed van`. The format should be `MAKER | TYPE | USAGE | CONDITION | TOP_SPEED | electric van  *`
 - `std::string consumption() const`: returns the string value of what type of consumption is van of.
 
 This class should not have access to the attributes of the parent class.
+
+
 
 ### `Car` Module
 
@@ -323,17 +327,17 @@ No need to change anything else.
 
 Update the `Van` module to handle invalid records, and generate exceptions when an invalid record is detected. This requires you to modify the custom constructor to detect the following situations:
 - the token representing the type of the van different character than `p`, `m` or `c`:
-	- generate an exception to inform the client that this record is invalid
+  - generate an exception to inform the client that this record is invalid
 - the token representing the prupose of the van different character than `d`, `p` or `c`:
-	- generate an exception to inform the client that this record is invalid
+  - generate an exception to inform the client that this record is invalid
 - the token representing the condition the van is empty (no characters or only blanks):
   - consider that the car is **new**
 - the token representing the condition of the van is a different character than `n`, `u`, or `b`:
   - generate an exception to inform the client that this record is invalid
-- the token representing the consumption of the van is a different character than `e`, or `g`:
-  - generate an exception to inform the client that this record is invalid
+
 
 No need to change anything else.
+
 
 
 ### `Utilities` module
@@ -353,10 +357,6 @@ If there is no more information to be extracted from the stream, this function s
 
 Update this module to include two additional public functions.
 
-***Private Members***
-
-- std::vector<Luxuryvan*> m_lvehicles: a vector that store all the Luxury vans available at this autoshop.
-
 ***Public Members***
 
 - a destructor. This function should iterate over the objects stored in the vector, and delete each one of them (note that the first portion has a memory leak because the dynamically allocated vehicles were not deleted anywhere).
@@ -365,12 +365,6 @@ Update this module to include two additional public functions.
   ```cpp
   bool func(const sdds::Vehicle*);
   ```
-
-- `void typev(T test, std::list<const Luxuryvan*>& lv)`: a **template** function that iterates over the vehicles stored in the `m_lvehicles`, and adds to the second parameter all vehicles for which the `test` is true. The first parameter (`test`) can be a lambda expression, a pointer to a function, or a functor that matches the prototype:
-  ```cpp
-  bool func(const sdds::Luxuryvan*);
-  ```
-
   **Since this is a template function, it must be implemented in the header!** The class is not a template.
 
 
