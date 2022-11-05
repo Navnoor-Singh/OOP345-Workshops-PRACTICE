@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 
 	{
 		printHeader("Crimes in Ontario");
-		auto col = statistics.getListForProvice("Ontario");
+		auto col = statistics.getListForProvince("Ontario");
 		for (auto& crime : col)
 		{
 			crime.m_resolved -= 3;
